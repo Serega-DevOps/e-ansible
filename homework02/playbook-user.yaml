@@ -1,0 +1,17 @@
+---
+
+# Ansible homework 2 - task 1 by student Sergei Golovanov
+
+- name: Add users
+  hosts: all
+  vars_files: vars/vars.yaml
+  
+  tasks:
+          - name: Add users
+            user:
+                    name: "{{ item.key }}"
+                    shell: /bin/bash
+                    comment: "{{ item.value.email }}"
+                    password: "{{ item.value.password | password_hash('sha512') }}"
+            with_dict: "{{ users }}"
+
