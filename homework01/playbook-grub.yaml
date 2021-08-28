@@ -1,0 +1,28 @@
+---
+
+# Ansible homework 1 - task 3 by student Sergei Golovanov
+
+- name: Modify GRUB
+  hosts: all
+
+  tasks:
+          - name: Search parameters 
+            shell: cat /etc/default/grub | grep 'net.ifnames=0 biosdevname=0' | wc -l
+            register: search_result
+
+          - name: Print search_result
+            debug:
+                    var: search_result
+
+          - name: Add parameters to GRUB
+            lineinfile:
+                    path: /etc/default/grub
+                    backrefs: yes
+                    regexp: '^(.*)GRUB_CMDLINE_LINUX="(.*)$'
+                    line: '\1GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0 \2'
+            when: search_result.stdout == "0" 
+
+          - name: Update GRUB
+            command:
+                    cmd: grub2-mkconfig -o /boot/grub2/grub.cfg
+            when: search_result.stdout == "0"

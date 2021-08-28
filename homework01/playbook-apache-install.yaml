@@ -1,0 +1,31 @@
+---
+
+# Ansible homework 1 - task 1 by student Sergei Golovanov
+
+- name: Setup Apache
+  hosts: all
+
+  tasks:
+          - name: Install httpd
+            package:
+                    name: httpd
+                    state: latest
+
+          - name: Open firewall port for httpd service
+            firewalld:
+                    port: 80/tcp
+                    permanent: yes
+                    immediate: yes
+                    state: enabled
+
+          - name: Modify index.html
+            copy:
+                    content: 'Welcome to my web server'
+                    dest: /var/www/html/index.html
+                    mode: '0644'
+
+          - name: Enable and start service httpd
+            service:
+                    name: httpd
+                    enabled: yes
+                    state: started

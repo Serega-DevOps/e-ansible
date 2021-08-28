@@ -1,0 +1,25 @@
+---
+
+# Ansible homework 1 - task 2 by student Sergei Golovanov
+
+- name: Delete Apache
+  hosts: all
+
+  tasks:
+          - name: Delete httpd
+            package:
+                    name: httpd
+                    state: absent
+
+          - name: Close firewall port for httpd service
+            firewalld:
+                    port: 80/tcp
+                    permanent: yes
+                    immediate: yes
+                    state: disabled
+
+          - name: Delete index.html
+            file:
+                    path: /var/www/html/index.html
+                    state: absent
+
