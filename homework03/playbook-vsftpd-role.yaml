@@ -1,0 +1,9 @@
+---
+
+# Ansible homework 3 - task 2 by student Sergei Golovanov
+# /var/ftp/pub - read-only for anon, /var/ftp/pub/upload - read/write for anon (without new folder creation)
+
+- name: Play vsftpd role
+  hosts: all
+  roles:
+          - vsftpd

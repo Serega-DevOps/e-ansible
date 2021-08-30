@@ -1,0 +1,9 @@
+---
+# handlers file for vsftpd
+
+          - name: Service status update vsftpd
+            service:
+                    name: vsftpd
+                    enabled: yes
+                    state: restarted
+

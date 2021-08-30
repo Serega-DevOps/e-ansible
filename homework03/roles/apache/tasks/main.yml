@@ -1,0 +1,22 @@
+---
+# tasks file for apache
+
+          - name: Install httpd
+            package:
+                    name: httpd
+                    state: latest
+
+          - name: Open firewall port for httpd service
+            firewalld:
+                    port: "{{ web_server_port }}"
+                    permanent: yes
+                    immediate: yes
+                    state: enabled
+
+          - name: Modify index.html
+            template:
+                    src: index.j2
+                    dest: /var/www/html/index.html
+                    mode: '0644'
+            notify: Service status update httpd
+

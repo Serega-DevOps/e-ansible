@@ -1,0 +1,9 @@
+---
+# handlers file for apache
+
+          - name: Service status update httpd
+            service:
+                    name: httpd
+                    enabled: yes
+                    state: restarted
+

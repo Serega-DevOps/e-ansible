@@ -1,0 +1,9 @@
+---
+# defaults file for vsftpd
+
+ports:
+        - "30000-31000/tcp"
+        - "20-21/tcp"
+vsftpd_target_cfg: "/etc/vsftpd/vsftpd.conf"
+default_ftp_directory: "/var/ftp/pub"
+upload_ftp_directory: "/var/ftp/pub/upload"

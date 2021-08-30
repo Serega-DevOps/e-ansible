@@ -1,0 +1,9 @@
+---
+
+# Ansible homework 3 - task 1 and 2 by student Sergei Golovanov
+
+- name: Play apache and vsftpd roles
+  hosts: all
+  roles:
+          - apache
+          - vsftpd

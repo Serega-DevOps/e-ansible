@@ -1,0 +1,8 @@
+---
+
+# Ansible homework 3 - task 1 by student Sergei Golovanov
+
+- name: Play apache role
+  hosts: all
+  roles:
+          - apache

@@ -1,0 +1,57 @@
+---
+# tasks file for vsftpd
+
+          - name: Install vsftpd
+            package:
+                    name: vsftpd
+                    state: latest
+
+          - name: Open firewall port for vsftpd service
+            firewalld:
+                    port: "{{ item }}"
+                    permanent: yes
+                    immediate: yes
+                    state: enabled
+            with_items:
+                    - "{{ ports }}"
+           
+          - name: Change group owner for ftp directory
+            file:
+                    path: "{{ default_ftp_directory }}"
+                    owner: root
+                    group: ftp
+
+          - name: Create directory for upload files
+            file:
+                    path: "{{ upload_ftp_directory }}"
+                    state: directory
+                    owner: root
+                    group: ftp
+                    mode: g+rwx
+
+          - name: Change selinux context for anon ftp upload directory
+            sefcontext:
+                   target: "{{ upload_ftp_directory }}(/.*)?"
+                   setype: public_content_rw_t
+                   state: present
+            register: context
+          
+          - name: Apply selinux context for anon ftp upload directory
+            command: restorecon -irv "{{ upload_ftp_directory }}"
+            when: context.changed == true
+
+          - name: Enable selinux policy for anon writes to ftp upload directory
+            seboolean:
+                   name: ftpd_anon_write
+                   state: yes
+                   persistent: yes
+
+          - name: Modify vsftpd.conf
+            copy:
+                    src: vsftpd.conf
+                    dest: "{{ vsftpd_target_cfg }}"
+                    owner: root
+                    group: root
+                    mode: "0644"
+            notify: Service status update vsftpd
+
